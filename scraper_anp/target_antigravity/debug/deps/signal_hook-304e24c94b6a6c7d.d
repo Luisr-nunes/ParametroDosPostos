@@ -1,9 +1,0 @@
-C:\Users\luisr\Desktop\_\PROJETOS PESSOAIS\ParametroDosPostos\scraper_anp\target_antigravity\debug\deps\signal_hook-304e24c94b6a6c7d.d: C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\lib.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\flag.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\low_level\mod.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\low_level\channel.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\low_level\signal_details.rs
-
-C:\Users\luisr\Desktop\_\PROJETOS PESSOAIS\ParametroDosPostos\scraper_anp\target_antigravity\debug\deps\libsignal_hook-304e24c94b6a6c7d.rmeta: C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\lib.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\flag.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\low_level\mod.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\low_level\channel.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\low_level\signal_details.rs
-
-C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\lib.rs:
-C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\flag.rs:
-C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\low_level\mod.rs:
-C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\low_level\channel.rs:
-C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\signal-hook-0.4.4\src\low_level\signal_details.rs:

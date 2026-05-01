@@ -1,8 +1,0 @@
-C:\Users\luisr\Desktop\_\PROJETOS PESSOAIS\ParametroDosPostos\scraper_anp\target_antigravity\debug\deps\polars_dtype-fea128cd84d689cc.d: C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\lib.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\categorical\mod.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\categorical\catsize.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\categorical\mapping.rs
-
-C:\Users\luisr\Desktop\_\PROJETOS PESSOAIS\ParametroDosPostos\scraper_anp\target_antigravity\debug\deps\libpolars_dtype-fea128cd84d689cc.rmeta: C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\lib.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\categorical\mod.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\categorical\catsize.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\categorical\mapping.rs
-
-C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\lib.rs:
-C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\categorical\mod.rs:
-C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\categorical\catsize.rs:
-C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\polars-dtype-0.53.0\src\categorical\mapping.rs:
