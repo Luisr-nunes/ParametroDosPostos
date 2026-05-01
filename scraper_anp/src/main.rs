@@ -63,7 +63,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
         if cnpj.is_empty() { continue; }
 
-        if let Err(_e) = insert_interdicao(&pool, &cnpj, motivo, status).await {
+        if let Err(_e) = insert_interdicao(&pool, cnpj, motivo, status).await {
             // Ignorar erros caso o posto não exista no banco (fk)
         } else {
             count += 1;

@@ -85,7 +85,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     for (ensaio_name, ensaio_data) in amostra_data.ensaios {
                         let conforme = ensaio_data.conforme.to_uppercase() == "SIM";
 
-                        if let Err(_) = insert_pmqc(&pool, cnpj, produto, &ensaio_name, conforme).await {
+                        if insert_pmqc(&pool, cnpj, produto, &ensaio_name, conforme).await.is_err() {
                             // Silenciosamente ignorar erros de postos não cadastrados
                         } else {
                             count += 1;

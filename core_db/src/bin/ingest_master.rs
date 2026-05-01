@@ -37,7 +37,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
         .build()?;
 
-    let mut ufs = vec![
+    let ufs = vec![
         "PE", "SP", "MG", "RJ", "PR", "SC", "RS", "BA", "CE", "DF", "ES", "GO", "MA", 
         "MT", "MS", "AC", "AL", "AP", "AM", "PA", "PB", "PI", "RN", "RO", "RR", "SE", "TO"
     ];
