@@ -1,0 +1,8 @@
+[workspace]
+members = [
+    "api",
+    "scraper_anp",
+    "parser_pmqc",
+    "core_db"
+]
+resolver = "2"

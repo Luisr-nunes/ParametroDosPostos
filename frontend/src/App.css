@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Notion-like Dark Theme Tokens */
+  --bg-primary: #191919;
+  --bg-secondary: #252525;
+  --bg-tertiary: #2F2F2F;
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --border-color: #373737;
+  
+  /* Accent Colors */
+  --accent-blue: #2EAADC;
+  --accent-green: #3CA267;
+  --accent-red: #D9443B;
+  
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+
+#root {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* App Layout */
+.app-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar {
+  width: 320px;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.sidebar h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-box {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.search-box:focus {
+  border-color: var(--accent-blue);
+}
+
+.status-list {
+  margin-top: 24px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.station-card {
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.station-card:hover {
+  background-color: var(--bg-primary);
+  border-color: var(--text-secondary);
+}
+
+.station-card.active {
+  border-color: var(--accent-blue);
+  background-color: rgba(46, 170, 220, 0.05);
+  box-shadow: 0 0 0 1px var(--accent-blue);
+}
+
+.station-card h3 {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Leaflet Popup Styling */
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+
+.leaflet-popup-content {
+  margin: 12px 16px !important;
+  line-height: 1.4 !important;
+}
+
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.popup-container h4 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.popup-container p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Custom Marker Styles */
+.custom-marker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+
+.marker-green { background-color: var(--accent-green); box-shadow: 0 0 10px var(--accent-green); }
+.marker-red { background-color: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); }
+.marker-grey { background-color: #888; }
+
+.station-card p {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.badge.success {
+  background-color: rgba(60, 162, 103, 0.2);
+  color: var(--accent-green);
+}
+
+.badge.danger {
+  background-color: rgba(217, 68, 59, 0.2);
+  color: var(--accent-red);
+}
+
+.main-content {
+  flex: 1;
+  background-color: var(--bg-primary);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  background-image: radial-gradient(var(--bg-tertiary) 1px, transparent 1px);
+  background-size: 20px 20px;
+}

@@ -1,0 +1,12 @@
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.9"
+core_db = { version = "0.1.0", path = "../core_db" }
+serde = { version = "1.0.228", features = ["derive"] }
+sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio"] }
+tokio = { version = "1.52.1", features = ["full"] }
+tower-http = { version = "0.6.8", features = ["cors"] }

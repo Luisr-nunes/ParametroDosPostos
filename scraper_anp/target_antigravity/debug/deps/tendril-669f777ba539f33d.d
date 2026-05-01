@@ -1,0 +1,12 @@
+C:\Users\luisr\Desktop\_\PROJETOS PESSOAIS\ParametroDosPostos\scraper_anp\target_antigravity\debug\deps\tendril-669f777ba539f33d.d: C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\lib.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\fmt.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\stream.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\buf32.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\tendril.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\utf8_decode.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\util.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\futf.rs
+
+C:\Users\luisr\Desktop\_\PROJETOS PESSOAIS\ParametroDosPostos\scraper_anp\target_antigravity\debug\deps\libtendril-669f777ba539f33d.rmeta: C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\lib.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\fmt.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\stream.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\buf32.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\tendril.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\utf8_decode.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\util.rs C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\futf.rs
+
+C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\lib.rs:
+C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\fmt.rs:
+C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\stream.rs:
+C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\buf32.rs:
+C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\tendril.rs:
+C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\utf8_decode.rs:
+C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\util.rs:
+C:\Users\luisr\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tendril-0.5.0\src\futf.rs:
