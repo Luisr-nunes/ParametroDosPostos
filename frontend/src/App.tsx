@@ -8,7 +8,7 @@ import "./App.css";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-let DefaultIcon = L.icon({
+const DefaultIcon = L.icon({
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
   iconSize: [25, 41],
@@ -16,6 +16,9 @@ let DefaultIcon = L.icon({
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;
+
+// URL base da API — configurável via variável de ambiente
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 interface Interdicao {
   motivo: string;
@@ -75,7 +78,7 @@ function App() {
       
       const queryParam = search.trim() ? `?q=${encodeURIComponent(search)}` : '';
       
-      fetch(`http://localhost:3000/api/postos/search${queryParam}`)
+      fetch(`${API_BASE_URL}/api/postos/search${queryParam}`)
         .then((res) => {
           if (!res.ok) throw new Error("Erro na rede ao buscar postos");
           return res.json();
@@ -86,7 +89,7 @@ function App() {
         })
         .catch((err) => {
           console.error(err);
-          setError("Não foi possível conectar à API. Verifique se o 'cargo run --bin api' está rodando.");
+          setError("Não foi possível conectar à API. Verifique se o backend está rodando.");
           setLoading(false);
         });
     }, 500);
@@ -100,6 +103,7 @@ function App() {
         <h1>⛽ ParâmetroPostos</h1>
         
         <input 
+          id="search-input"
           type="text" 
           className="search-box" 
           placeholder="Buscar por CNPJ, Nome ou Cidade..." 
@@ -109,15 +113,20 @@ function App() {
 
         <div className="status-list">
           <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 12 }}>
-            Resultados {loading && "(Carregando...)"}
+            {loading ? "Carregando..." : `${stations.length} resultado(s)`}
           </p>
           
           {error && <p style={{ fontSize: 12, color: 'var(--accent-red)' }}>{error}</p>}
           
+          {!loading && !error && stations.length === 0 && search.trim() !== "" && (
+            <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 24, textAlign: 'center' }}>
+              Nenhum posto encontrado para "{search}".
+            </p>
+          )}
+
           {stations.map(station => {
             const isInterditado = station.interdicoes.some(i => i.status === "INTERDITADO");
             const hasQualidadeRuim = station.pmqc.some(p => !p.conforme);
-            const hasNoInfo = station.interdicoes.length === 0 && station.pmqc.length === 0;
 
             return (
               <div 
@@ -136,7 +145,7 @@ function App() {
                   <span className={`badge ${station.status_autorizacao === 'ATIVO' && !isInterditado ? 'success' : 'danger'}`}>
                     {isInterditado ? 'Interditado ANP' : station.status_autorizacao || 'Desconhecido'}
                   </span>
-                  {!hasNoInfo && station.pmqc.length > 0 && (
+                  {station.pmqc.length > 0 && (
                     <span className={`badge ${hasQualidadeRuim ? 'danger' : 'success'}`}>
                       {hasQualidadeRuim ? 'PMQC Reprovado' : 'PMQC Aprovado'}
                     </span>

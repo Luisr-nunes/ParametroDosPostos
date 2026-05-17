@@ -1,7 +1,8 @@
 [package]
 name = "parser_pmqc"
-version = "0.1.0"
-edition = "2021"
+description = "Parser de dados do PMQC (Programa de Monitoramento da Qualidade dos Combustíveis)"
+version.workspace = true
+edition.workspace = true
 
 [dependencies]
 core_db = { version = "0.1.0", path = "../core_db" }

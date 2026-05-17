@@ -1,3 +1,9 @@
+-- =============================================================================
+-- Migration: 002_seed_data.sql
+-- Descrição: Dados de teste para desenvolvimento local
+-- Dependência: 001_init.sql
+-- =============================================================================
+
 -- Seed Postos
 INSERT INTO postos (cnpj, razao_social, endereco, municipio, uf, status_autorizacao, localizacao) VALUES
 ('00.000.000/0001-01', 'Auto Posto Bandeira S/A', 'Av. Paulista, 1000', 'São Paulo', 'SP', 'ATIVO', ST_SetSRID(ST_MakePoint(-46.6560, -23.5617), 4326)),

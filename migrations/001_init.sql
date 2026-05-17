@@ -1,3 +1,9 @@
+-- =============================================================================
+-- Migration: 001_init.sql
+-- Descrição: Schema inicial do banco de dados ParametroDosPostos
+-- Requer: PostGIS extension
+-- =============================================================================
+
 CREATE EXTENSION IF NOT EXISTS postgis;
 
 -- Tabela de Postos de Combustível
@@ -43,5 +49,9 @@ CREATE TABLE IF NOT EXISTS inspecoes_pmqc (
     data_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Índice geoespacial
-CREATE INDEX idx_postos_localizacao ON postos USING GIST (localizacao);
+-- Índices para performance
+CREATE INDEX IF NOT EXISTS idx_postos_localizacao ON postos USING GIST (localizacao);
+CREATE INDEX IF NOT EXISTS idx_postos_municipio ON postos (municipio);
+CREATE INDEX IF NOT EXISTS idx_postos_uf ON postos (uf);
+CREATE INDEX IF NOT EXISTS idx_interdicoes_cnpj ON interdicoes_anp (posto_cnpj);
+CREATE INDEX IF NOT EXISTS idx_pmqc_cnpj ON inspecoes_pmqc (posto_cnpj);

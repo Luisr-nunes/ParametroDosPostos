@@ -8,6 +8,7 @@ Cargo.lock
 node_modules/
 dist/
 build/
+*.tsbuildinfo
 
 # VSCode
 .vscode/
@@ -23,7 +24,7 @@ __pycache__/
 # Logs
 *.log
 
-# Env
+# Environment (não versionar credenciais)
 .env
 
 # Database dumps/backups
@@ -31,6 +32,5 @@ __pycache__/
 *.db
 *.bak
 
-# Ignore CSVs (if not versioned)
-#dados_postos.csv
-#interdicoes.csv
+# Dados de entrada (grandes demais para versionamento)
+data/*.csv

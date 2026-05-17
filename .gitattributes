@@ -13,6 +13,11 @@ Cargo.lock text eol=lf
 *.jsx text eol=lf
 *.json text eol=lf
 
+# Web
+*.html text eol=lf
+*.css text eol=lf
+*.svg text eol=lf
+
 # Markdown
 *.md text eol=lf
 

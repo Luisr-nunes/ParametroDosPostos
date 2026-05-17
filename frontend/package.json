@@ -1,5 +1,6 @@
 {
-  "name": "frontend",
+  "name": "parametro-postos-frontend",
+  "description": "Interface web para monitoramento de postos de combustível",
   "private": true,
   "version": "0.1.0",
   "type": "module",

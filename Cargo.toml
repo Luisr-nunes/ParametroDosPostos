@@ -3,6 +3,11 @@ members = [
     "api",
     "scraper_anp",
     "parser_pmqc",
-    "core_db"
+    "core_db",
 ]
 resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"

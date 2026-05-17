@@ -1,3 +1,10 @@
+//! Coletor e parser de interdições da ANP.
+//!
+//! Baixa o CSV de medidas cautelares do portal de dados abertos da ANP
+//! e insere as interdições no banco de dados.
+//!
+//! Uso: `cargo run --package scraper_anp`
+
 use reqwest::Client;
 use std::error::Error;
 use core_db::{establish_connection, insert_interdicao};
@@ -6,7 +13,7 @@ use polars::prelude::*;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    println!("Iniciando coletor e parser de interdições ANP...");
+    println!("🔍 Iniciando coletor de interdições ANP...");
     
     let pool = establish_connection().await?;
     
@@ -15,27 +22,30 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .build()?;
 
     let url_interdicoes = "https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/medidas-cautelares-postos.csv";
-    let file_path = "interdicoes.csv";
+    let file_path = "data/interdicoes.csv";
 
-    println!("Baixando histórico de interdições...");
+    println!("📥 Baixando histórico de interdições...");
     
     let response = client.get(url_interdicoes).send().await?;
     if response.status().is_success() {
         let content = response.bytes().await?;
+        // Garante que a pasta data/ existe
+        std::fs::create_dir_all("data")?;
         let mut file = std::fs::File::create(file_path)?;
         file.write_all(&content)?;
-        println!("Download concluído.");
+        println!("✅ Download concluído: {}", file_path);
     } else {
-        println!("Não foi possível baixar o arquivo. Status: {}. Criando dados de fallback...", response.status());
+        println!("⚠️  Download falhou (Status: {}). Usando dados de fallback...", response.status());
         let fallback_csv = "CNPJ;MOTIVO;STATUS\n\
         00.000.000/0001-01;Bomba Fraudadora;INTERDITADO\n\
         33.333.333/0001-33;Combustível Adulterado;INTERDITADO\n\
         44.444.444/0001-44;Falta de Licença;DESINTERDITADO\n";
+        std::fs::create_dir_all("data")?;
         let mut file = std::fs::File::create(file_path)?;
         file.write_all(fallback_csv.as_bytes())?;
     }
     
-    println!("Lendo arquivo {} com Polars...", file_path);
+    println!("📊 Processando CSV com Polars...");
     
     let file_path_str = file_path.to_string();
     let df = tokio::task::spawn_blocking(move || {
@@ -49,7 +59,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
             .unwrap()
     }).await?;
             
-    println!("Processando {} registros...", df.height());
+    println!("📋 {} registros encontrados no CSV.", df.height());
     
     let cnpjs = df.column("CNPJ")?.str()?;
     let motivos = df.column("MOTIVO")?.str()?;
@@ -63,14 +73,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
         if cnpj.is_empty() { continue; }
 
-        if let Err(_e) = insert_interdicao(&pool, cnpj, motivo, status).await {
-            // Ignorar erros caso o posto não exista no banco (fk)
-        } else {
+        if insert_interdicao(&pool, cnpj, motivo, status).await.is_ok() {
             count += 1;
         }
+        // Silenciosamente ignora erros de postos não cadastrados (FK constraint)
     }
     
-    println!("Parser de interdições finalizado. {} novas interdições registradas.", count);
+    println!("🎉 Coletor de interdições finalizado. {} registros inseridos.", count);
     
     Ok(())
 }

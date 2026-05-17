@@ -3,5 +3,9 @@
         "--target-dir",
         "target/rust-analyzer"
     ],
-    "rust-analyzer.cargo.targetDir": "target/rust-analyzer"
+    "rust-analyzer.cargo.targetDir": "target/rust-analyzer",
+    "editor.formatOnSave": true,
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    }
 }

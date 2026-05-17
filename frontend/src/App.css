@@ -15,6 +15,7 @@
   --accent-blue: #2EAADC;
   --accent-green: #3CA267;
   --accent-red: #D9443B;
+  --accent-yellow: #D9A540;
   
   --radius-md: 6px;
   --radius-lg: 10px;
@@ -84,6 +85,10 @@ body {
   border-color: var(--accent-blue);
 }
 
+.search-box::placeholder {
+  color: var(--text-secondary);
+}
+
 .status-list {
   margin-top: 24px;
   flex: 1;
@@ -91,6 +96,24 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+/* Custom Scrollbar para a sidebar */
+.status-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.status-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.status-list::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 3px;
+}
+
+.status-list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-secondary);
 }
 
 .station-card {
@@ -189,21 +212,15 @@ body {
   color: var(--accent-red);
 }
 
+.badge.warning {
+  background-color: rgba(217, 165, 64, 0.2);
+  color: var(--accent-yellow);
+}
+
 .main-content {
   flex: 1;
   background-color: var(--bg-primary);
   position: relative;
   display: flex;
   flex-direction: column;
-}
-
-.map-placeholder {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  font-size: 14px;
-  background-image: radial-gradient(var(--bg-tertiary) 1px, transparent 1px);
-  background-size: 20px 20px;
 }

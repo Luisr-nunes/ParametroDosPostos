@@ -1,4 +1,11 @@
-use core_db::{establish_connection};
+//! Ingestão em massa dos dados cadastrais de postos via CSV da ANP.
+//!
+//! Baixa o arquivo CSV de revendedores varejistas do portal de dados abertos
+//! da ANP e insere/atualiza os registros no banco de dados PostgreSQL.
+//!
+//! Uso: `cargo run --bin ingest_postos`
+
+use core_db::establish_connection;
 use polars::prelude::*;
 use std::env;
 use std::io::Write;
@@ -6,12 +13,12 @@ use reqwest::Client;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("Iniciando Ingestão de Postos ANP...");
+    println!("🚀 Iniciando Ingestão Nacional de Postos ANP (via CSV)...");
     
-    let file_path = env::var("ANP_CSV_PATH").unwrap_or_else(|_| "dados_postos.csv".to_string());
+    let file_path = env::var("ANP_CSV_PATH").unwrap_or_else(|_| "data/dados_postos.csv".to_string());
     let download_url = "https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/arquivos-dados-cadastrais-dos-revendedores-varejistas-de-combustiveis-automotivos/dados-cadastrais-revendedores-varejistas-combustiveis-automoveis.csv";
 
-    println!("Baixando dados mais recentes da ANP em: {}...", download_url);
+    println!("📥 Baixando dados da ANP...");
     
     let client = Client::builder()
         .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
@@ -21,16 +28,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     if response.status().is_success() {
         let content = response.bytes().await?;
+        // Garante que a pasta data/ existe
+        std::fs::create_dir_all("data")?;
         let mut file = std::fs::File::create(&file_path)?;
         file.write_all(&content)?;
-        println!("Download concluído com sucesso. Arquivo salvo em: {}", file_path);
+        println!("✅ Download concluído: {}", file_path);
     } else {
-        println!("Falha ao baixar arquivo da ANP. Status: {}", response.status());
+        eprintln!("⚠️  Download falhou (Status: {})", response.status());
         if !std::path::Path::new(&file_path).exists() {
-            println!("Erro crítico: Arquivo local não encontrado e download falhou.");
+            eprintln!("❌ Arquivo local não encontrado e download falhou. Abortando.");
             return Ok(());
         }
-        println!("Usando arquivo local existente para prosseguir.");
+        println!("📂 Usando arquivo local existente: {}", file_path);
     }
 
     let file_path_clone = file_path.clone();
@@ -46,7 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .unwrap()
     }).await?;
 
-    println!("CSV carregado. Total de postos encontrados: {}", df.height());
+    println!("📊 CSV carregado: {} postos encontrados.", df.height());
 
     let pool = establish_connection().await?;
     
@@ -55,8 +64,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let enderecos = df.column("ENDERECO")?.str()?;
     let municipios = df.column("MUNICIPIO")?.str()?;
     let ufs = df.column("UF")?.str()?;
-    // The dataset might not have "STATUS", let's mock it as ATIVO for now.
-    // let status = df.column("STATUS")?.str()?;
 
     let mut inserted = 0;
 
@@ -66,7 +73,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let endereco = enderecos.get(i).unwrap_or("");
         let municipio = municipios.get(i).unwrap_or("");
         let uf = ufs.get(i).unwrap_or("");
-        let stat = "ATIVO"; // hardcoded since we lack the column in the current dataset
+        // Dataset não possui coluna STATUS — defaultar para ATIVO
+        let stat = "ATIVO";
 
         if cnpj.is_empty() { continue; }
 
@@ -88,12 +96,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         if result.is_ok() {
             inserted += 1;
-            if inserted % 1000 == 0 {
-                println!("{} postos inseridos/atualizados...", inserted);
+            if inserted % 5000 == 0 {
+                println!("  📈 {} postos inseridos/atualizados...", inserted);
             }
         }
     }
 
-    println!("Ingestão Nacional concluída! Total inserido no PostGIS: {}", inserted);
+    println!("🎉 Ingestão Nacional concluída! Total no PostGIS: {}", inserted);
     Ok(())
 }

@@ -8,10 +8,12 @@ Sistema para monitoramento e análise de parâmetros de postos de combustível n
 .
 ├── api/              # API REST (Axum) - localhost:3000
 ├── core_db/          # Camada de banco de dados compartilhada
-├── scraper_anp/      # Web scraper da ANP (dados públicos)
+├── scraper_anp/      # Web scraper + ingestão ANP
 ├── parser_pmqc/      # Parser de dados PMQC
-├── frontend/         # Interface web (React + Vite)
-└── db/               # Migrations e scripts SQL
+├── frontend/         # Interface web (React + Vite + Leaflet)
+├── migrations/       # Scripts SQL (init + seed)
+├── data/             # Dados de entrada (CSVs, não versionados)
+└── docs/             # Documentação e estratégia
 ```
 
 ## 🚀 Quick Start
@@ -19,46 +21,53 @@ Sistema para monitoramento e análise de parâmetros de postos de combustível n
 ### Pré-requisitos
 - Rust 1.70+
 - Node.js 18+
-- PostgreSQL 13+
+- PostgreSQL 13+ com PostGIS
 - Docker (opcional)
 
 ### Setup Local
 
 ```bash
-# 1. Criar database (com Docker)
-docker-compose up -d
+# 1. Configurar variáveis de ambiente
+cp .env.example .env
+# Edite o .env com suas credenciais
 
-# 2. Rodar migrations
-psql -U postgres -d parametro_postos -f db/init.sql
+# 2. Criar database (com Docker)
+docker compose up -d
 
-# 3. Build Rust
+# 3. Rodar migrations (se não usar Docker)
+psql -U admin -d parametrodospostos -f migrations/001_init.sql
+
+# 4. Build Rust
 cargo build
 
-# 4. Seed data (opcional)
-cargo run --bin seed --release
+# 5. Seed data (opcional — dados de teste)
+cargo run --bin seed
 
-# 5. Rodar API
-cargo run --bin ingest_master
-cargo run --package api --release
+# 6. Ingestão de dados reais (escolha um)
+cargo run --bin ingest_master   # Via API oficial da ANP
+cargo run --bin ingest_postos   # Via CSV da ANP
 
-# 6. Frontend (novo terminal)
+# 7. Rodar API
+cargo run --package api
+
+# 8. Frontend (novo terminal)
 cd frontend
 npm install
 npm run dev
 ```
 
-A API estará em `http://localhost:3000` e o frontend em `http://localhost:5173`
+A API estará em `http://localhost:3000` e o frontend em `http://localhost:5173`.
 
 ## 📡 API Endpoints
 
 ```bash
-# Listar todos os postos
+# Listar postos (limit 50)
 GET /api/postos
 
-# Buscar postos
-GET /api/postos/search?q=combustivel&limit=50
+# Buscar postos por nome, CNPJ ou cidade
+GET /api/postos/search?q=combustivel
 
-# Ver status
+# Health check
 GET /health
 ```
 
@@ -66,11 +75,11 @@ GET /health
 
 ```bash
 # Watch mode (Vite frontend)
-npm run dev
+cd frontend && npm run dev
 
 # Build production
 cargo build --release
-npm run build
+cd frontend && npm run build
 
 # Format code
 cargo fmt
@@ -81,24 +90,25 @@ cargo clippy
 
 ## 📊 Database Schema
 
-- `postos` - Dados dos postos
-- `combustiveis` - Tipos e preços de combustível
-- `interdicoes` - Histórico de interdições
+- `postos` — Cadastro dos postos de combustível (com PostGIS)
+- `interdicoes_anp` — Histórico de interdições da ANP
+- `inspecoes_pmqc` — Resultados de inspeções PMQC
 
-Veja `db/` para migrations.
+Veja `migrations/` para os scripts SQL.
 
 ## 📝 Dados de Entrada
 
-- `dados_postos.csv` - Dados brutos dos postos
-- `interdicoes.csv` - Histórico de interdições
+Os CSVs de dados ficam na pasta `data/` (não versionados):
+- `dados_postos.csv` — Cadastro dos revendedores varejistas
+- `interdicoes.csv` — Medidas cautelares / interdições
 
 ## 🛠️ Stack
 
 - **Backend**: Rust (Axum, SQLx, Tokio)
-- **Frontend**: React + TypeScript + Vite
-- **Database**: PostgreSQL
-- **Scraping**: Polars, Reqwest, Scraper
+- **Frontend**: React + TypeScript + Vite + Leaflet
+- **Database**: PostgreSQL + PostGIS
+- **Ingestão**: Polars, Reqwest
 
 ---
 
-**Última atualização**: 2026-05-01
+**Última atualização**: 2026-05-17
