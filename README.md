@@ -1,114 +1,108 @@
-# ParametroDosPostos
+# Parâmetro dos Postos
 
-Sistema para monitoramento e análise de parâmetros de postos de combustível no Brasil.
+<!-- badges -->
+![Rust](https://img.shields.io/badge/Rust-000000?style=flat-square&logo=rust&logoColor=white) ![Axum](https://img.shields.io/badge/Axum-4A4A4A?style=flat-square) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white) ![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=flat-square&logo=leaflet&logoColor=white) ![Tauri](https://img.shields.io/badge/Tauri-24C8D8?style=flat-square&logo=tauri&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
 
-## 🏗️ Estrutura do Projeto
+[Read in English](README.en.md)
+
+Radar de conformidade dos postos de combustível do Brasil: reúne o cadastro oficial da ANP, o histórico de interdições e os resultados das análises de qualidade do PMQC em um banco geoespacial, com API e mapa interativo para consulta.
+
+## Sobre
+
+O projeto cruza bases públicas da ANP para responder se um posto está regular e como foi seu histórico de fiscalização. Os dados são coletados por rotinas de ingestão em Rust, gravados em PostgreSQL com PostGIS e expostos por uma API consumida por um front-end com mapa.
+
+A estratégia de evolução, de validador de planilhas para radar nacional de conformidade, está em [`docs/ESTRATEGIA_EVOLUCAO.md`](docs/ESTRATEGIA_EVOLUCAO.md).
+
+## Funcionalidades
+
+- Ingestão do cadastro de revendedores pela API pública da ANP, por UF (`ingest_master`), ou a partir do CSV oficial (`ingest_postos`).
+- Parser do PMQC (Programa de Monitoramento da Qualidade dos Combustíveis), que baixa o JSON mensal e grava os ensaios de cada amostra.
+- Banco com geolocalização dos postos (PostGIS).
+- API para listar postos e buscar por nome, CNPJ ou cidade.
+- Mapa interativo com Leaflet e marcadores por situação do posto.
+
+## Arquitetura
 
 ```
-.
-├── api/              # API REST (Axum) - localhost:3000
-├── core_db/          # Camada de banco de dados compartilhada
-├── scraper_anp/      # Web scraper + ingestão ANP
-├── parser_pmqc/      # Parser de dados PMQC
-├── frontend/         # Interface web (React + Vite + Leaflet)
-├── migrations/       # Scripts SQL (init + seed)
-├── data/             # Dados de entrada (CSVs, não versionados)
-└── docs/             # Documentação e estratégia
+API ANP / CSV ──► scraper_anp ──┐
+JSON PMQC ──────► parser_pmqc ──┼──► core_db ──► PostgreSQL + PostGIS
+                                │
+                         api (Axum, :3000) ──► frontend (React + Leaflet)
 ```
 
-## 🚀 Quick Start
+## Tecnologias
 
-### Pré-requisitos
-- Rust 1.70+
-- Node.js 18+
-- PostgreSQL 13+ com PostGIS
-- Docker (opcional)
+| Camada | Tecnologia |
+| --- | --- |
+| Back-end | Rust (workspace), Axum 0.8, Tokio, SQLx 0.8 |
+| Ingestão | Reqwest, Scraper, Polars |
+| Banco | PostgreSQL 15 com PostGIS 3.3 (Docker) |
+| Front-end | React 19, TypeScript, Vite, Leaflet / React Leaflet |
+| Desktop (em configuração) | Tauri 2 |
 
-### Setup Local
+## Estrutura
+
+```
+ParametroDosPostos/
+├── api/            # API REST (Axum)
+├── core_db/        # conexão e operações de banco compartilhadas; bin seed
+├── scraper_anp/    # ingestão da ANP: bins ingest_master e ingest_postos
+├── parser_pmqc/    # ingestão do PMQC
+├── frontend/       # React + Vite (e projeto Tauri em src-tauri/)
+├── migrations/     # 001_init.sql e 002_seed_data.sql
+├── docs/
+└── docker-compose.yml
+```
+
+Tabelas: `postos`, `interdicoes_anp` e `inspecoes_pmqc`.
+
+## Como executar
+
+Pré-requisitos: Rust estável, Node.js 18+ e Docker (ou PostgreSQL com PostGIS).
 
 ```bash
-# 1. Configurar variáveis de ambiente
-cp .env.example .env
-# Edite o .env com suas credenciais
+git clone https://github.com/Luisr-nunes/ParametroDosPostos.git
+cd ParametroDosPostos
 
-# 2. Criar database (com Docker)
-docker compose up -d
+cp .env.example .env              # ajuste DATABASE_URL
+docker compose up -d              # PostgreSQL + PostGIS
+psql "$DATABASE_URL" -f migrations/001_init.sql
 
-# 3. Rodar migrations (se não usar Docker)
-psql -U admin -d parametrodospostos -f migrations/001_init.sql
-
-# 4. Build Rust
 cargo build
+cargo run --bin seed              # opcional: dados de teste
+cargo run --bin ingest_master     # postos pela API da ANP
+cargo run --package parser_pmqc   # análises do PMQC
 
-# 5. Seed data (opcional — dados de teste)
-cargo run --bin seed
+cargo run --package api           # http://localhost:3000
+```
 
-# 6. Ingestão de dados reais (escolha um)
-cargo run --bin ingest_master   # Via API oficial da ANP
-cargo run --bin ingest_postos   # Via CSV da ANP
+Em outro terminal:
 
-# 7. Rodar API
-cargo run --package api
-
-# 8. Frontend (novo terminal)
+```bash
 cd frontend
 npm install
-npm run dev
+npm run dev                       # http://localhost:5173
 ```
 
-A API estará em `http://localhost:3000` e o frontend em `http://localhost:5173`.
+Para usar uma API em outro endereço, defina `VITE_API_URL`. Os CSVs usados por `ingest_postos` ficam em `data/`, que não é versionada.
 
-## 📡 API Endpoints
+## API
 
-```bash
-# Listar postos (limit 50)
-GET /api/postos
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| GET | `/health` | Verificação de saúde |
+| GET | `/api/postos` | Lista postos (até 50) |
+| GET | `/api/postos/search?q=` | Busca por nome, CNPJ ou cidade |
 
-# Buscar postos por nome, CNPJ ou cidade
-GET /api/postos/search?q=combustivel
-
-# Health check
-GET /health
-```
-
-## 🔧 Desenvolvimento
+## Desenvolvimento
 
 ```bash
-# Watch mode (Vite frontend)
-cd frontend && npm run dev
-
-# Build production
+cargo fmt
+cargo clippy
 cargo build --release
 cd frontend && npm run build
-
-# Format code
-cargo fmt
-
-# Lint
-cargo clippy
 ```
 
-## 📊 Database Schema
+## Autor
 
-- `postos` — Cadastro dos postos de combustível (com PostGIS)
-- `interdicoes_anp` — Histórico de interdições da ANP
-- `inspecoes_pmqc` — Resultados de inspeções PMQC
-
-Veja `migrations/` para os scripts SQL.
-
-## 📝 Dados de Entrada
-
-Os CSVs de dados ficam na pasta `data/` (não versionados):
-- `dados_postos.csv` — Cadastro dos revendedores varejistas
-- `interdicoes.csv` — Medidas cautelares / interdições
-
-## 🛠️ Stack
-
-- **Backend**: Rust (Axum, SQLx, Tokio)
-- **Frontend**: React + TypeScript + Vite + Leaflet
-- **Database**: PostgreSQL + PostGIS
-- **Ingestão**: Polars, Reqwest
-
----
-
-**Última atualização**: 2026-05-17
+Luís Nunes — [GitHub](https://github.com/Luisr-nunes) · [LinkedIn](https://www.linkedin.com/in/luis-nunes-dev/)
